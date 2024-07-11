@@ -4,45 +4,57 @@
     <!-- <input v-model="person.name"> -->
    <!-- <span>{{ person.name }} -> {{ normalazeName}}</span> -->
   <input v-model="taskTitle">
-  <button @click="addTask">Add task</button>
+  <MyButton title="Add task"/> 
   <div class="task-list">
-    <template v-for="task in tasks">
-      <div 
-        v-if="showOnlyCompleted ? task.complete : false"
-        class="task"
-        :class="[{'task--complete' : task.complete}]"
-      >
-        {{ task.title }}
-        <button @click="task.complete = !task.complete">
-          complete
-        </button>
+    <template 
+      v-for="task in tasks" 
+      :key="task.id">
+        <div
+          v-if="Object.values(showOnlyCompleted).find(item => item === 'complete') ? task.complete : true"
+          class="task"
+          :class="{'task--complete' : task.complete}"
+        >
+          {{ task.title }}
+          <button @click="task.complete = !task.complete">
+            complete
+          </button>
       </div>
     </template>
   </div>
-
   <!-- <div v-for="value, key in {name: 'Den', wallet: 'sdfsdfsf'}">
     {{ key }} " {{ value }}"
   </div> -->
   <div>
-    <input v-model="showOnlyCompleted" type="checkbox" >
-    Show only completed
+    <div v-for="filter in ['complete', 'uncompleted', 'last', 'today']" :key="filter">
+      <input v-model="showOnlyCompleted" type="checkbox" :value="filter">
+      <span>
+        <!-- Show only completed -->
+        {{ filter }}
+      </span>
+    </div>
   </div>
-
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from "vue";
+import MyButton from "@/components/MyButton.vue"
 
-type Task = {title: string, complete: boolean}
+type Task = {title: string, complete: boolean, id: number}
+let id = 0
 const taskTitle = ref('')
-const showOnlyCompleted = ref('false')
+let color = 'blue'
+const showOnlyCompleted = ref([])
+// const showOnlyCompleted = ref('')
 const tasks = ref([] as Task[])
 
-
 function addTask(){
-  tasks.value.push({title: taskTitle.value, complete: true})
+  tasks.value.push({title: taskTitle.value, complete: false, id: id++})
   taskTitle.value = ''
+  console.log(tasks);
 }
+
+
+
 // function complete(task: ref<Task>){
 
 // }
@@ -75,10 +87,13 @@ function addTask(){
 
 <style>
 .task-list{
+  color: v-bind(color);
   display: flex;
   flex-direction: column;
 }
+
 .task--complete{
   text-decoration: line-through;
 }
+
 </style>
