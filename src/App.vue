@@ -4,7 +4,7 @@
     <!-- <input v-model="person.name"> -->
    <!-- <span>{{ person.name }} -> {{ normalazeName}}</span> -->
   <input v-model="taskTitle">
-  <MyButton title="Add task"/> 
+  <MyButton /> 
   <div class="task-list">
     <template 
       v-for="task in tasks" 
