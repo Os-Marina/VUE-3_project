@@ -1,19 +1,51 @@
 <template>
-    <button :title="props.title">{{ props.title }}</button>
+    <!-- <button :title="props.title">{{ props.title }}</button> -->
+    <button @click="$emit('my-click')">
+    <!-- <button @click="emit('my-click')"> -->
+        <slot />
+    </button>
 </template>
 
 <script  lang="ts" setup>
+import { inject } from 'vue';
 import type { User } from './type';
 
 
 // import {User} from '@/components/type'
 
-
 const props = withDefaults(
     defineProps<{
         title?: string //в данном случае мы не можем указать кастомную функцию validator
     }>(), 
-    {title: "Button"})
+    {title: "Button"}
+)
+//через максрос emit
+defineEmits<{
+    'my-click': []
+}>()
+
+const theme = inject('theme')
+/*
+//вариант вида JS
+const emit = defineEmits<{
+    'my-click': []
+}>()
+*/
+/*
+const props = withDefaults(
+    defineProps<{
+        title?: string //в данном случае мы не можем указать кастомную функцию validator
+    }>(), 
+    {title: "Button"}
+)
+
+//вариант вида JS
+const emit = defineEmits<{
+    click: []
+}>()
+// const emit = defineEmits(['click'])
+*/
+
 /*
 const props = defineProps<{
     title?: string //в данном случае мы не можем указать кастомную функцию validator

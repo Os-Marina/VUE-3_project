@@ -4,7 +4,7 @@
     <!-- <input v-model="person.name"> -->
    <!-- <span>{{ person.name }} -> {{ normalazeName}}</span> -->
   <input v-model="taskTitle">
-  <MyButton /> 
+  <MyButton @my-click="addTask">Add Task </MyButton>
   <div class="task-list">
     <template 
       v-for="task in tasks" 
@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, provide, computed } from "vue";
 import MyButton from "@/components/MyButton.vue"
 
 type Task = {title: string, complete: boolean, id: number}
@@ -52,6 +52,8 @@ function addTask(){
   taskTitle.value = ''
   console.log(tasks);
 }
+
+provide('theme', 'dark')
 
 
 
@@ -83,11 +85,16 @@ function addTask(){
 //   computedCount.value = num + 1
 // }) 
 */
+
+
+
+
+//color: v-bind(color);
 </script>
 
 <style>
 .task-list{
-  color: v-bind(color);
+  
   display: flex;
   flex-direction: column;
 }
