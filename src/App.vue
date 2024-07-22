@@ -4,47 +4,50 @@
     <!-- <input v-model="person.name"> -->
    <!-- <span>{{ person.name }} -> {{ normalazeName}}</span> -->
   <input v-model="taskTitle">
-  <MyButton @my-click="addTask">Add Task </MyButton>
-  <div class="task-list">
-    <template 
-      v-for="task in tasks" 
-      :key="task.id">
-        <div
-          v-if="Object.values(showOnlyCompleted).find(item => item === 'complete') ? task.complete : true"
-          class="task"
-          :class="{'task--complete' : task.complete}"
-        >
-          {{ task.title }}
-          <button @click="task.complete = !task.complete">
-            complete
-          </button>
+  <MyButton 
+    ref="button"
+    v-model:tags="additional" 
+    @my-click="addTask"
+  >Add Task 
+  </MyButton>
+  <TodoList :tasks="tasks">
+    <template #default="{ task, title }">
+      <div
+        class="task"
+      >
+        {{ task.title }}
+        {{ title }}
+        <button @click="task.complete = !task.complete">
+          complete
+        </button>
       </div>
     </template>
-  </div>
+  </TodoList>
   <!-- <div v-for="value, key in {name: 'Den', wallet: 'sdfsdfsf'}">
     {{ key }} " {{ value }}"
   </div> -->
-  <div>
+  <!-- <div>
     <div v-for="filter in ['complete', 'uncompleted', 'last', 'today']" :key="filter">
       <input v-model="showOnlyCompleted" type="checkbox" :value="filter">
       <span>
-        <!-- Show only completed -->
+        Show only completed
         {{ filter }}
       </span>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script setup lang="ts">
-import { ref, provide, computed } from "vue";
+import { ref, provide, computed, onMounted } from "vue";
 import MyButton from "@/components/MyButton.vue"
+import TodoList from "@/components/TodoList.vue";
 
 type Task = {title: string, complete: boolean, id: number}
 let id = 0
 const taskTitle = ref('')
 let color = 'blue'
-const showOnlyCompleted = ref([])
-// const showOnlyCompleted = ref('')
+// const showOnlyCompleted = ref([])
+const showOnlyCompleted = ref('')
 const tasks = ref([] as Task[])
 
 function addTask(){
@@ -52,8 +55,15 @@ function addTask(){
   taskTitle.value = ''
   console.log(tasks);
 }
+const additional = ref([])
+const button = ref()
 
-provide('theme', 'dark')
+onMounted(() => {
+  console.log(button.value.input.focus());
+  
+})
+
+// provide('theme', 'dark')
 
 
 
